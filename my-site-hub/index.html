@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script src="../assets/gate.js"></script>
+    <script>window.MNGate&&MNGate.guardSubpage();</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>身高差工具・模拟器一览</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ffcc33;
+            --secondary-color: #ffb347;
+            --text-color: #5c4b3a;
+            --sub-text-color: #8c7b6a;
+            --bg-color: #fdf6e3;
+            --card-bg: #ffffff;
+            --accent-glow: rgba(255, 204, 51, 0.4);
+            --new-color: #ff6b6b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 12px 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* --- 标题部分 --- */
+        header {
+            text-align: center;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1rem, 4.5vw, 1.4rem);
+            margin: 0 auto;
+            position: relative;
+            display: inline-block;
+            padding: 0 4px;
+            color: var(--text-color);
+            z-index: 1;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        h1::before {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 204, 51, 0.35);
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        /* --- 始终显示的超紧凑说明区域 --- */
+        .info-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            border: 1.5px solid rgba(255, 204, 51, 0.35);
+            box-shadow: 0 2px 6px rgba(92, 75, 58, 0.04);
+            text-align: center;
+        }
+
+        .rule-text {
+            font-size: 0.72rem;
+            line-height: 1.35;
+        }
+
+        .warning {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        .notice-text {
+            margin-top: 4px;
+            font-size: 0.68rem;
+            color: var(--sub-text-color);
+            line-height: 1.25;
+        }
+
+        /* --- 3列固定卡片容器 --- */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* --- 卡片设计 --- */
+        .card {
+            background: linear-gradient(145deg, #ffffff, #fffdf8);
+            border-radius: 14px;
+            padding: 10px 4px 8px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 3px 8px rgba(92, 75, 58, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+            border: 1.5px solid rgba(255, 204, 51, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 4px;
+            position: relative;
+            min-height: 64px;
+        }
+
+        .card:not(.coming-soon):hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 14px var(--accent-glow);
+            border-color: var(--primary-color);
+        }
+
+        .card.coming-soon {
+            opacity: 0.7;
+            cursor: default;
+            border: 1.5px dashed #dcd6a9;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .icon {
+            font-size: 1.25rem;
+            line-height: 1;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.08));
+        }
+
+        .title {
+            font-weight: 700;
+            font-size: 0.73rem;
+            line-height: 1.2;
+            word-break: break-word;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 8px 4px; }
+            .container { gap: 6px; }
+            .card { padding: 8px 3px 6px; min-height: 58px; border-radius: 12px; }
+            .icon { font-size: 1.1rem; }
+            .title { font-size: 0.65rem; letter-spacing: -0.02em; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>身高差工具・模拟器一览</h1>
+</header>
+
+<div class="info-container">
+    <div class="rule-text">
+        截图发布、加工、临摹等请随意使用。<br>
+        <span class="warning">※请勿用于营利或商业用途。</span>
+    </div>
+
+    <div class="notice-text">
+        新工具准备就绪后将陆续添加。
+    </div>
+</div>
+
+<div class="container">
+    <a href="hand-size-comparison/" class="card">
+        <div class="icon">✋</div>
+        <div class="title">手掌大小比较工具</div>
+    </a>
+
+    <a href="foot-size-comparison/" class="card">
+        <div class="icon">🦶</div>
+        <div class="title">脚掌大小比较工具</div>
+    </a>
+
+    <a href="eye-level-simulator/" class="card">
+        <div class="icon">👀</div>
+        <div class="title">视线差模拟器</div>
+    </a>
+
+    <a href="shared-shirt-simulator/" class="card">
+        <div class="icon">👔</div>
+        <div class="title">男友衬衫模拟器</div>
+    </a>
+
+    <a href="stroll-date-simulator/" class="card">
+        <div class="icon">👣</div>
+        <div class="title">散步模拟器</div>
+    </a>
+
+    <a href="kabedon-floor-simulator/" class="card">
+        <div class="icon">💥</div>
+        <div class="title">壁咚模拟器</div>
+    </a>
+
+    <a href="3d-height-comparison/" class="card">
+        <div class="icon">📏</div>
+        <div class="title">3D身高比较工具</div>
+    </a>
+
+    <a href="hug-simulator/" class="card">
+        <div class="icon">🫂</div>
+        <div class="title">拥抱模拟器</div>
+    </a>
+
+    <a href="cuddling-simulator/" class="card">
+        <div class="icon">💤</div>
+        <div class="title">依偎睡眠模拟器</div>
+    </a>
+
+    <a href="couple-pic-simulator/" class="card">
+        <div class="icon">🤳</div>
+        <div class="title">合影模拟器</div>
+    </a>
+
+    <a href="kiss-simulator/" class="card">
+        <div class="icon">💋</div>
+        <div class="title">接吻模拟器</div>
+    </a>
+
+    <a href="aiaigasa-simulator/" class="card">
+        <div class="icon">☔</div>
+        <div class="title">同撑一把伞模拟器</div>
+    </a>
+
+    <a href="purikura-simulator/" class="card">
+        <div class="icon">📸</div>
+        <div class="title">大头贴模拟器</div>
+    </a>
+
+    <a href="sitting-simulator/" class="card">
+        <div class="icon">🪑</div>
+        <div class="title">坐姿模拟器</div>
+    </a>
+
+    <a href="kabedon-simulator/" class="card">
+        <div class="icon">🧱</div>
+        <div class="title">壁咚模拟器</div>
+    </a>
+
+    <a href="stay-at-home-date-simulator/" class="card">
+        <div class="icon">🏠</div>
+        <div class="title">居家约会模拟器</div>
+    </a>
+
+    <a href="lap-pillow-simulator/" class="card">
+        <div class="icon">🦵</div>
+        <div class="title">膝枕模拟器</div>
+    </a>
+
+    <a href="sharing-a-scarf-simulator/" class="card">
+        <div class="icon">🧣</div>
+        <div class="title">围巾模拟器</div>
+    </a>
+
+    <a href="piggyback-simulator/" class="card">
+        <div class="icon">🎒</div>
+        <div class="title">背背模拟器</div>
+    </a>
+
+    <a href="put-to-bed-simulator/" class="card">
+        <div class="icon">👶</div>
+        <div class="title">哄睡模拟器</div>
+    </a>
+
+    <a href="bookshelf-simulator/" class="card">
+        <div class="icon">📚</div>
+        <div class="title">书架模拟器</div>
+    </a>
+
+    <a href="princess-carry-simulator/" class="card">
+        <div class="icon">👸</div>
+        <div class="title">公主抱模拟器</div>
+    </a>
+
+    <a href="leg-hold-simulator/" class="card">
+        <div class="icon">🤲</div>
+        <div class="title">膝上抱模拟器</div>
+    </a>
+
+    <a href="hakozume-simulator/" class="card">
+        <div class="icon">📦</div>
+        <div class="title">装箱模拟器</div>
+    </a>
+
+    <a href="straddling-simulator/" class="card">
+        <div class="icon">🏇</div>
+        <div class="title">跨坐模拟器</div>
+    </a>
+
+    <a href="beddon-simulator/" class="card">
+        <div class="icon">🛏️</div>
+        <div class="title">床咚模拟器</div>
+    </a>
+
+    <a href="propose-simulator/" class="card">
+        <div class="icon">💘</div>
+        <div class="title">求婚模拟器</div>
+    </a>
+
+</div>
+
+</body>
+</html>
